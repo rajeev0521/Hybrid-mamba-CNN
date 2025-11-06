@@ -8,6 +8,7 @@ __pycache__/
 mamba-research/
 venv/
 .env/
+data/
 
 # Ignore build and distribution directories
 build/
