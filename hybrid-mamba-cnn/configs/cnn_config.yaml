@@ -1,0 +1,43 @@
+# CNN Baseline Configuration
+
+# Inherit from base config
+_base_: "base_config.yaml"
+
+# Model Configuration
+model:
+  name: "cnn_baseline"
+  type: "cnn"
+  
+  # CNN Backbone Configuration
+  cnn:
+    backbone: "resnet50"  # Options: resnet18, resnet34, resnet50, efficientnet_b0, etc.
+    pretrained: true
+    freeze_backbone: false
+    feature_dim: 2048
+    dropout: 0.2
+    
+  # Classification Head
+  classifier:
+    hidden_dims: [512, 256]
+    dropout: 0.3
+    activation: "relu"
+
+# Training Configuration
+training:
+  batch_size: 32
+  num_epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  
+# Experiment Configuration
+experiment:
+  name: "cnn_baseline_isic2019"
+  description: "CNN baseline model for ISIC 2019 skin lesion classification"
+  tags: ["baseline", "cnn", "resnet50", "isic2019"]
+  checkpoint_dir: "../results/checkpoints"
+  log_dir: "../results/logs"
+  use_wandb: false
+  wandb_project: "hybrid-mamba-cnn"
+  wandb_entity: null
+  log_interval: 10
+  results_dir: "../results/summaries"

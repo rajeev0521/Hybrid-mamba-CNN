@@ -2,13 +2,26 @@
 
 A comprehensive implementation of hybrid Mamba-CNN architectures for medical image classification, specifically designed for the ISIC 2019 skin lesion classification challenge.
 
-## 🎯 Project Overview
+## Project Overview
 
 This project implements and compares three approaches for medical image classification:
 
-1. **CNN Baseline**: Traditional convolutional neural networks (ResNet, EfficientNet)
+1. **CNN Baseline**: Traditional convolutional neural networks (ResNet-50)
 2. **Vision Mamba**: State-space model-based architecture for vision tasks
 3. **Hybrid Mamba-CNN**: Novel fusion architecture combining both approaches
+
+# Dataset overview
+
+The ISIC 2019 dataset contains dermatoscopic images of skin lesions across multiple diagnostic categories including:
+
+- Melanoma (malignant)
+- Melanocytic nevus (benign moles)
+- Basal cell carcinoma
+- Actinic keratosis
+- Benign keratosis
+- Dermatofibroma
+- Vascular lesions
+- Squamous cell carcinoma
 
 ## 📋 Features
 
@@ -155,7 +168,7 @@ training:
 ## 🔬 Model Architectures
 
 ### CNN Baseline
-- **Backbones**: ResNet18/34/50, EfficientNet-B0/B1/B2
+- **Backbones**: ResNet50
 - **Classification Head**: Multi-layer perceptron with dropout
 - **Features**: Transfer learning, batch normalization, ReLU activation
 
@@ -164,27 +177,11 @@ training:
 - **Mamba Blocks**: State-space models with configurable depth
 - **Classification**: Global average pooling with dense layer
 
-### Hybrid Mamba-CNN
-- **Dual Branch**: CNN and Mamba feature extractors
-- **Fusion Methods**: 
-  - Concatenation: Simple feature concatenation
-  - Addition: Element-wise feature addition
-  - Attention: Multi-head attention mechanism
-  - Gating: Learnable gating mechanism
-- **Classification**: Fused features through classification head
+Here is a **clear, deep, yet beginner-friendly explanation** of **how Attention Fusion works** in your Hybrid Mamba-CNN model.
+This is suitable for a viva, presentation, README, or research paper.
 
-## 📈 Results
+---
 
-Expected performance on ISIC 2019 dataset:
-
-| Model | Accuracy | F1-Score | AUC | Parameters |
-|-------|----------|----------|-----|------------|
-| CNN Baseline | 85.2% | 0.823 | 0.931 | 23.5M |
-| Vision Mamba | 83.8% | 0.811 | 0.922 | 18.7M |
-| Hybrid (Concat) | 86.1% | 0.834 | 0.938 | 42.2M |
-| Hybrid (Attention) | 87.4% | 0.847 | 0.945 | 42.8M |
-
-## 🧪 Ablation Studies
 
 The project includes comprehensive ablation studies:
 

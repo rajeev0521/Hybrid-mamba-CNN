@@ -1,0 +1,37 @@
+graph TD
+    subgraph Input
+        Img["Input Image<br>(512x512)"]
+    end
+
+    subgraph Parallel_Encoders ["Parallel Encoders"]
+        direction LR
+        
+        %% CNN Branch
+        Img -->|Input| CNN["CNN Encoder<br>(ResNet50)"]
+        CNN -->|Local Features| CNN_Feat["CNN Features<br>(2048-dim)"]
+        
+        %% Mamba Branch
+        Img -->|Patch Embedding| Patches[Patches]
+        Patches -->|Sequence| Mamba["Vision Mamba Encoder<br>(12 Layers)"]
+        Mamba -->|Global Context| Mamba_Feat["Mamba Features<br>(768-dim)"]
+    end
+
+    subgraph Feature_Fusion ["Feature Fusion"]
+        CNN_Feat --> Fusion{"Fusion Module"}
+        Mamba_Feat --> Fusion
+        
+        Fusion -- "Attention / Concat / Add / Gate" --> Fused["Fused Representation<br>(1024-dim)"]
+    end
+
+    subgraph Output
+        Fused --> Classifier["Classification Head<br>(MLP)"]
+        Classifier --> Logits["Class Logits<br>(8 Classes)"]
+        Logits --> Pred["Prediction<br>(Melanoma, Nevus, etc.)"]
+    end
+
+    %% Styling
+    style Img fill:#f9f,stroke:#333,stroke-width:2px
+    style CNN fill:#bbf,stroke:#333,stroke-width:2px
+    style Mamba fill:#bfb,stroke:#333,stroke-width:2px
+    style Fusion fill:#fbb,stroke:#333,stroke-width:2px
+    style Classifier fill:#ddd,stroke:#333,stroke-width:2px

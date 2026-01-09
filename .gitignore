@@ -1,0 +1,38 @@
+# ============================================
+# Hybrid Mamba Project Root .gitignore
+# ============================================
+
+# Model checkpoints (large files)
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.hdf5
+*.onnx
+checkpoints/
+*/checkpoints/
+main results/
+results/
+
+# Logs
+*.log
+logs/
+*/logs/
+
+# Data
+data/
+*/data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

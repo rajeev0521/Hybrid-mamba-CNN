@@ -1,0 +1,40 @@
+# Vision Mamba Baseline Configuration
+
+# Inherit from base config
+_base_: "base_config.yaml"
+
+model:
+  name: "vim_baseline"
+  type: "vim"
+  
+  mamba:
+    patch_size: 16
+    embed_dim: 768
+    depth: 12
+    d_state: 128
+    d_conv: 4
+    expand: 2
+    dropout: 0.1
+  
+  classifier:
+    hidden_dims: [512]
+    dropout: 0.2
+
+# Training Configuration
+training:
+  batch_size: 16
+  num_epochs: 100
+  learning_rate: 0.0005
+  weight_decay: 0.01
+  warmup_epochs: 10
+
+# Experiment Configuration
+experiment:
+  name: "vim_baseline_isic2019"
+  description: "Vision Mamba baseline model for ISIC 2019 skin lesion classification"
+  tags: ["baseline", "vision_mamba", "isic2019"]
+  checkpoint_dir: "../results/checkpoints"
+  log_dir: "../results/logs"
+  results_dir: "../results/summaries"
+  use_wandb: false
+  wandb_project: "hybrid-mamba-cnn"
