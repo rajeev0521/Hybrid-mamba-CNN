@@ -12,7 +12,7 @@ def create_data_splits():
     """Create train/validation splits for ISIC 2019 dataset"""
     
     # Define paths
-    data_dir = Path(__file__).parent / "data"
+    data_dir = Path(__file__).parent.parent / "data"
     raw_dir = data_dir / "raw"
     splits_dir = data_dir / "splits"
     
@@ -25,12 +25,13 @@ def create_data_splits():
     
     print(f"Total images: {len(df)}")
     
+    import numpy as np
     # Get image IDs and labels
-    image_ids = df['image'].values
+    image_ids = np.array(df['image'])
     
     # Convert multi-hot encoding to single class label
     classes = ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC', 'SCC']
-    labels = df[classes].idxmax(axis=1)
+    labels = df[classes].idxmax(axis=1).to_numpy()
     
     # Create stratified split (80% train, 20% validation)
     X_train, X_val, y_train, y_val = train_test_split(
@@ -48,8 +49,8 @@ def create_data_splits():
     val_df = pd.DataFrame({'image': X_val, 'label': y_val})
     
     # One-hot encode labels
-    train_df = pd.get_dummies(train_df, columns=['label'], prefix='', prefix_sep='')
-    val_df = pd.get_dummies(val_df, columns=['label'], prefix='', prefix_sep='')
+    train_df = pd.get_dummies(train_df, columns=['label'], prefix='', prefix_sep='', dtype=int)
+    val_df = pd.get_dummies(val_df, columns=['label'], prefix='', prefix_sep='', dtype=int)
     
     # Ensure all classes are present in both dataframes
     for cls in classes:
