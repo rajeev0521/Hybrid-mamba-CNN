@@ -106,8 +106,17 @@ def main():
     
     # Create dataloaders
     print("Creating dataloaders...")
+    data_dir = config['dataset']['data_dir']
+    if not Path(data_dir).exists():
+        if (Path(__file__).parent / data_dir).exists():
+            data_dir = str(Path(__file__).parent / data_dir)
+        elif (Path(__file__).parent / "data").exists():
+            data_dir = str(Path(__file__).parent / "data")
+        elif Path(data_dir.replace("hybrid-mamba-cnn/", "")).exists():
+            data_dir = data_dir.replace("hybrid-mamba-cnn/", "")
+
     train_loader, val_loader, test_loader, class_names = create_dataloaders(
-        data_dir=config['dataset']['data_dir'],
+        data_dir=data_dir,
         batch_size=config['training']['batch_size'],
         num_workers=config['hardware']['num_workers'],
         img_size=config['dataset']['img_size']

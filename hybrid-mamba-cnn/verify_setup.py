@@ -35,7 +35,15 @@ def check_data_and_config():
         return False
     
     data_dir = config['dataset']['data_dir']
-    # Fix relative path if needed
+    # Check if data_dir exists, otherwise check relative to parent or project root
+    if not Path(data_dir).exists():
+        if (Path(__file__).parent / data_dir).exists():
+            data_dir = str(Path(__file__).parent / data_dir)
+        elif (Path(__file__).parent / "data").exists():
+            data_dir = str(Path(__file__).parent / "data")
+        elif (Path(data_dir.replace("hybrid-mamba-cnn/", "")).exists()):
+            data_dir = data_dir.replace("hybrid-mamba-cnn/", "")
+            
     if not os.path.isabs(data_dir):
         data_dir = os.path.abspath(data_dir)
         

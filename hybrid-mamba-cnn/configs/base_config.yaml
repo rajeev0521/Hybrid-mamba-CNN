@@ -67,7 +67,7 @@ model:
 # Hardware Configuration (single section, no duplicates)
 hardware:
   device: "cuda"
-  num_workers: 4
+  num_workers: 0
   pin_memory: true
   mixed_precision: true
 

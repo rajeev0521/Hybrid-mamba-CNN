@@ -15,11 +15,11 @@ model:
   
   mamba:
     patch_size: 16
-    embed_dim: 768
-    depth: 8
-    d_state: 128
+    embed_dim: 384
+    depth: 4
+    d_state: 32
     d_conv: 4
-    expand: 2
+    expand: 1
     dropout: 0.1
   
   fusion:
@@ -35,10 +35,10 @@ model:
 # Training Configuration
 training:
   batch_size: 8  # Reduced for GPU memory
-  num_epochs: 120
+  num_epochs: 20
   learning_rate: 0.0008
   weight_decay: 0.001
-  warmup_epochs: 8  # Warmup is now properly implemented
+  warmup_epochs: 5
   
   loss:
     type: "focal_loss"  # Changed to focal loss for class imbalance

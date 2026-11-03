@@ -9,11 +9,11 @@ model:
   
   mamba:
     patch_size: 16
-    embed_dim: 768
-    depth: 12
-    d_state: 128
+    embed_dim: 384
+    depth: 4
+    d_state: 32
     d_conv: 4
-    expand: 2
+    expand: 1
     dropout: 0.1
   
   classifier:
@@ -23,10 +23,10 @@ model:
 # Training Configuration
 training:
   batch_size: 16
-  num_epochs: 100
+  num_epochs: 20
   learning_rate: 0.0005
   weight_decay: 0.01
-  warmup_epochs: 10
+  warmup_epochs: 5
 
 # Experiment Configuration
 experiment:

@@ -65,7 +65,7 @@ termcolor==3.2.0
 threadpoolctl==3.6.0
 timm==0.9.12
 torch==2.4.1
-torchvision==0.15.2
+torchvision==0.19.1
 tqdm==4.67.1
 ttach==0.0.3
 typer-slim==0.20.0

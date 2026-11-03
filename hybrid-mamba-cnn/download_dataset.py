@@ -30,9 +30,20 @@ def download_and_prepare_dataset():
     
     # 1. Download Ground Truth CSV
     gt_csv_path = raw_dir / "ISIC_2019_Training_GroundTruth.csv"
-    gt_url = "https://isic-challenge-data.s3.amazonaws.com/2019/ISIC_2019_Training_GroundTruth.csv"
+    gt_url = "https://isic-archive.s3.amazonaws.com/challenges/2019/ISIC_2019_Training_GroundTruth.csv"
     
-    if not gt_csv_path.exists():
+    # Check if existing file is invalid or HTML redirect
+    needs_download = not gt_csv_path.exists()
+    if not needs_download:
+        try:
+            with open(gt_csv_path, 'r', encoding='utf-8', errors='ignore') as f:
+                header = f.readline()
+                if "image" not in header:
+                    needs_download = True
+        except Exception:
+            needs_download = True
+            
+    if needs_download:
         print(f"Downloading ground truth CSV from: {gt_url}")
         urllib.request.urlretrieve(gt_url, gt_csv_path)
         print(f"✅ Ground truth CSV saved to {gt_csv_path}")

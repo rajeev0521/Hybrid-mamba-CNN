@@ -40,7 +40,7 @@ class ExperimentLogger:
         
         # Create file handler
         log_file = self.log_dir / f"experiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-        file_handler = logging.FileHandler(log_file)
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(formatter)
         

@@ -165,27 +165,22 @@ class MambaBlock(nn.Module):
         # Initialize state
         h = torch.zeros(batch_size, inner_dim, d_state, device=x.device, dtype=x.dtype)
         
-        # Output tensor
-        y = torch.zeros_like(x)
+        # Precompute dA and dB across all timesteps to reduce per-step overhead
+        # delta: [B, seq_len, inner_dim] -> [B, seq_len, inner_dim, 1]
+        # A: [inner_dim, d_state] -> [1, 1, inner_dim, d_state]
+        # B: [B, seq_len, d_state] -> [B, seq_len, 1, d_state]
+        delta_u = delta.unsqueeze(-1)
+        dA_all = torch.exp(delta_u * A.view(1, 1, inner_dim, d_state))  # [B, seq_len, inner_dim, d_state]
+        dB_all = delta_u * B.unsqueeze(2)  # [B, seq_len, inner_dim, d_state]
         
-        # Run SSM for each time step
+        y_list = []
+        # Run recurrence
         for t in range(seq_len):
-            # Discretized A: exp(delta * A)
-            # delta[t]: [B, inner_dim], A: [inner_dim, d_state]
-            dA = torch.exp(delta[:, t, :].unsqueeze(-1) * A.unsqueeze(0))  # [B, inner_dim, d_state]
-            
-            # Discretized B: delta * B (simplified)
-            # delta[t]: [B, inner_dim], B[t]: [B, d_state]
-            dB = delta[:, t, :].unsqueeze(-1) * B[:, t, :].unsqueeze(1)  # [B, inner_dim, d_state]
-            
-            # State update: h = dA * h + dB * x
-            h = dA * h + dB * x[:, t, :].unsqueeze(-1)  # [B, inner_dim, d_state]
-            
-            # Output: y = C @ h
-            # C[t]: [B, d_state], h: [B, inner_dim, d_state]
-            y[:, t, :] = (h * C[:, t, :].unsqueeze(1)).sum(dim=-1)  # [B, inner_dim]
+            h = dA_all[:, t] * h + dB_all[:, t] * x[:, t, :].unsqueeze(-1)
+            yt = (h * C[:, t, :].unsqueeze(1)).sum(dim=-1)
+            y_list.append(yt)
         
-        return y
+        return torch.stack(y_list, dim=1)
 
 
 class VisionMambaEncoder(nn.Module):
